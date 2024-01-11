@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div class="lang-pt"><div rsslang="pt" rsscat="Publicado" rssmax="10"></div></div>
+<div class="lang-ca"><div rsslang="ca" rsscat="Notícies publicades" rssmax="10"></div></div>
+<div class="lang-de"><div rsslang="de" rsscat="Veröffentlicht" rssmax="10"></div></div>
+<div class="lang-el"><div rsslang="el" rsscat="Δημοσιευμένα" rssmax="10"></div></div>
+<div class="lang-en"><div rsslang="en" rsscat="Published" rssmax="10"></div></div>
+<div class="lang-eo"><div rsslang="eo" rsscat="Publikigitaj artikoloj" rssmax="10"></div></div>
+<div class="lang-es"><div rsslang="es" rsscat="Artículos publicados" rssmax="10"></div></div>
+<div class="lang-fi"><div rsslang="fi" rsscat="Julkaistut artikkelit" rssmax="10"></div></div>
+<div class="lang-fr"><div rsslang="fr" rsscat="Article publié" rssmax="10"></div></div>
+<div class="lang-it"><div rsslang="it" rsscat="Pubblicati" rssmax="10"></div></div>
+<div class="lang-ja"><div rsslang="ja" rsscat="公開中" rssmax="10"></div></div>
+<div class="lang-ko"><div rsslang="ko" rsscat="발행됨" rssmax="10"></div></div>
+<div class="lang-nl"><div rsslang="nl" rsscat="Gepubliceerd" rssmax="10"></div></div>
+<div class="lang-ro"><div rsslang="ro" rsscat="Publicate" rssmax="10"></div></div>
+<div class="lang-ru"><div rsslang="ru" rsscat="Опубликовано" rssmax="10"></div></div>
+<div class="lang-sr"><div rsslang="sr" rsscat="Објављено" rssmax="10"></div></div>
+<div class="lang-ta"><div rsslang="ta" rsscat="Published" rssmax="10"></div></div>
+<div class="lang-tr"><div rsslang="tr" rsscat="Yayınlandı" rssmax="10"></div></div>
+<div class="lang-uk"><div rsslang="uk" rsscat="Опубліковані" rssmax="10"></div></div>
+<div class="lang-zh"><div rsslang="zh" rsscat="已发布" rssmax="10"></div></div>
+
+<script>
+var divs = document.querySelectorAll('div[rsslang][rsscat][rssmax]');
+
+divs.forEach(function(div) {
+  var rsslang = div.getAttribute('rsslang');
+  var rsscat = div.getAttribute('rsscat');
+  var rssmax = div.getAttribute('rssmax');
+
+  var url = '//feed.jquery-plugins.net/load?url=https%3A%2F%2F' + rsslang + '.wikinews.org%2Fw%2Findex.php%3Fcategories%3D' + rsscat + '%26count%3D' + rssmax + '%26feed%3Drss%26hourcount%3D43800%26namespace%3D0%26title%3DSpecial%3ANewsFeed';
+
+  var request = new XMLHttpRequest();
+
+  request.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var data = JSON.parse(this.responseText);
+
+      if (data.data) {
+        var html = '';
+        for (var i = 0; i < data.data.length; i++) {
+          var entry = data.data[i];
+          html += '<div class="rssbox"><h2><a href="' + entry.link + '">' + entry.title + '</a></h2></div>';
+          html += '<div class="rsspopup">' + entry.description + '</div>';
+        }
+        div.innerHTML = html;
+      } else {
+        console.log('data.data não está definido');
+      }
+    }
+  };
+
+  request.open("GET", url, true);
+  request.send();
+});
+</script>
+</body>
+</html>
